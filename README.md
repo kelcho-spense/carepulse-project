@@ -40,3 +40,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 npx create-next-app@latest ./
 pnpm add clsx tailwind-merge
 pnpm add tailwindcss-animate
+
+pnpm add next-themes
+
