@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Control } from "react-hook-form"
-import { FormFieldsType } from '../forms/PatientForm'
+import { FormFieldsType } from './forms/PatientForm'
 import Image from 'next/image'
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
@@ -58,19 +58,19 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             )
         case FormFieldsType.PHONE_INPUT:
             return (
-               
-                    <FormControl>
-                        <PhoneInput
-                            defaultCountry='KE'
-                            placeholder={placeholder}
-                            international
-                            withCountryCallingCode
-                            value={field.value as string | undefined}
-                            onChange={field.onChange}
-                            className='input-phone'
-                        />
-                        
-                    </FormControl>
+
+                <FormControl>
+                    <PhoneInput
+                        defaultCountry='KE'
+                        placeholder={placeholder}
+                        international
+                        withCountryCallingCode
+                        value={field.value as string | undefined}
+                        onChange={field.onChange}
+                        className='input-phone'
+                    />
+
+                </FormControl>
             )
         case FormFieldsType.TEXTAREA:
     }

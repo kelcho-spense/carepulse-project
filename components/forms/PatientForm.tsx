@@ -6,7 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-import CustomFormField from "../ui/CustomFormField"
+import CustomFormField from "../CustomFormField"
+import SubmitButton from "../SubmitButton"
+import { useState } from "react"
+import { userFormValidation } from "@/lib/validation"
+import { useRouter } from "next/navigation"
 
 export enum FormFieldsType {
     INPUT = 'input',
@@ -18,24 +22,35 @@ export enum FormFieldsType {
     SKELETON = 'skeleton'
 }
 
-const formSchema = z.object({
-    username: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
-    }),
-})
 
 export default function PatientForm() {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const router = useRouter();
+
     // 1. Define your form.
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof userFormValidation>>({
+        resolver: zodResolver(userFormValidation),
         defaultValues: {
-            username: "",
+            name: "",
+            email: "",
+            phone: "",
         },
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    function onSubmit({ name, email, phone }: z.infer<typeof userFormValidation>) {
+        setIsLoading(true)
+        try {
+            const userData = { name, email, phone }
+            // connect to backend
+
+            // const user = await createUser(userData);
+
+            // if (user)  router.push(`/patients/${user.id}/register`)
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -73,7 +88,7 @@ export default function PatientForm() {
                     iconSrc="/assets/icons/email.svg"
                     iconAlt="email"
                 />
-                <Button type="submit">Submit</Button>
+                <SubmitButton isLoading={isLoading}> Get Started </SubmitButton>
             </form>
         </Form>
     )
