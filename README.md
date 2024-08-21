@@ -43,3 +43,5 @@ pnpm add tailwindcss-animate
 
 pnpm add next-themes
 
+pnpm add react-phone-number-input
+
