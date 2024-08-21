@@ -45,3 +45,5 @@ pnpm add next-themes
 
 pnpm add react-phone-number-input
 
+pnpm add node-appwrite
+
