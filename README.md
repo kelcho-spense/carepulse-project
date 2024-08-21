@@ -47,3 +47,5 @@ pnpm add react-phone-number-input
 
 pnpm add node-appwrite
 
+pnpm add react-datepicker
+

@@ -1,16 +1,16 @@
 "use client"
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
+
 import { Form } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { userFormValidation } from "@/lib/validation"
+import { createUser } from "@/lib/actions/patient.actions"
 
 import CustomFormField from "../CustomFormField"
 import SubmitButton from "../SubmitButton"
-import { useState } from "react"
-import { userFormValidation } from "@/lib/validation"
-import { useRouter } from "next/navigation"
 
 export enum FormFieldsType {
     INPUT = 'input',
@@ -38,17 +38,18 @@ export default function PatientForm() {
     })
 
     // 2. Define a submit handler.
-    function onSubmit({ name, email, phone }: z.infer<typeof userFormValidation>) {
+    async function onSubmit({ name, email, phone }: z.infer<typeof userFormValidation>) {
         setIsLoading(true)
         try {
+            // alert(`${name} ${email} ${phone}`)
             const userData = { name, email, phone }
+
             // connect to backend
-
-            // const user = await createUser(userData);
-
-            // if (user)  router.push(`/patients/${user.id}/register`)
-
+            const user = await createUser(userData);
+           
+            if (user) router.push(`/patients/${user.$id}/register`)
         } catch (error) {
+            
             console.log(error)
         }
     }
