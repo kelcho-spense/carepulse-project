@@ -6,7 +6,7 @@ import { z } from "zod"
 import { useRouter } from "next/navigation"
 
 import { Form } from "@/components/ui/form"
-import { userFormValidation } from "@/lib/validation"
+import { UserFormValidation } from "@/lib/validation"
 import { createUser } from "@/lib/actions/patient.actions"
 
 import CustomFormField from "../CustomFormField"
@@ -28,8 +28,8 @@ export default function PatientForm() {
     const router = useRouter();
 
     // 1. Define your form.
-    const form = useForm<z.infer<typeof userFormValidation>>({
-        resolver: zodResolver(userFormValidation),
+    const form = useForm<z.infer<typeof UserFormValidation>>({
+        resolver: zodResolver(UserFormValidation),
         defaultValues: {
             name: "",
             email: "",
@@ -38,7 +38,7 @@ export default function PatientForm() {
     })
 
     // 2. Define a submit handler.
-    async function onSubmit({ name, email, phone }: z.infer<typeof userFormValidation>) {
+    async function onSubmit({ name, email, phone }: z.infer<typeof UserFormValidation>) {
         setIsLoading(true)
         try {
             // alert(`${name} ${email} ${phone}`)

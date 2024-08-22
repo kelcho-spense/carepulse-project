@@ -7,12 +7,12 @@ import { Form, FormControl } from "@/components/ui/form"
 
 import CustomFormField from "../CustomFormField"
 import SubmitButton from "../SubmitButton"
-import { userFormValidation } from "@/lib/validation"
+import { PatientFormValidation } from "@/lib/validation"
 import { useRouter } from "next/navigation"
-import { createUser } from "@/lib/actions/patient.actions"
+import { createUser, registerPatient } from "@/lib/actions/patient.actions"
 import { FormFieldsType } from "./PatientForm"
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
-import { GenderOptions, Doctors, IdentificationTypes } from "@/constants"
+import { GenderOptions, Doctors, IdentificationTypes, PatientFormDefaultValues } from "@/constants"
 import { Label } from "../ui/label"
 import { SelectItem } from "../ui/select"
 import Image from "next/image"
@@ -26,9 +26,10 @@ export default function RegisterForm({ user }: { user: User }) {
     const router = useRouter();
 
     // 1. Define your form.
-    const form = useForm<z.infer<typeof userFormValidation>>({
-        resolver: zodResolver(userFormValidation),
+    const form = useForm<z.infer<typeof PatientFormValidation>>({
+        resolver: zodResolver(PatientFormValidation),
         defaultValues: {
+            ...PatientFormDefaultValues,
             name: "",
             email: "",
             phone: "",
@@ -36,21 +37,56 @@ export default function RegisterForm({ user }: { user: User }) {
     })
 
     // 2. Define a submit handler.
-    async function onSubmit({ name, email, phone }: z.infer<typeof userFormValidation>) {
+    async function onSubmit(values: z.infer<typeof PatientFormValidation>) {
         setIsLoading(true)
-        try {
-            // alert(`${name} ${email} ${phone}`)
-            const userData = { name, email, phone }
-
-            // connect to backend
-            const user = await createUser(userData);
-
-            if (user) router.push(`/patients/${user.$id}/register`)
-        } catch (error) {
-
-            console.log(error)
+      
+            let formData;
+            if (values.identificationDocument && values.identificationDocument?.length > 0) {
+                const blobFile = new Blob([values.identificationDocument[0]], {
+                    type: values.identificationDocument[0].type,
+                });
+                formData = new FormData();
+                formData.append("blobFile", blobFile);
+                formData.append("fileName", values.identificationDocument[0].name);
+            }
+            try {
+                const patient = {
+                  userId: user.$id,
+                  name: values.name,
+                  email: values.email,
+                  phone: values.phone,
+                  birthDate: new Date(values.birthDate),
+                  gender: values.gender,
+                  address: values.address,
+                  occupation: values.occupation,
+                  emergencyContactName: values.emergencyContactName,
+                  emergencyContactNumber: values.emergencyContactNumber,
+                  primaryPhysician: values.primaryPhysician,
+                  insuranceProvider: values.insuranceProvider,
+                  insurancePolicyNumber: values.insurancePolicyNumber,
+                  allergies: values.allergies,
+                  currentMedication: values.currentMedication,
+                  familyMedicalHistory: values.familyMedicalHistory,
+                  pastMedicalHistory: values.pastMedicalHistory,
+                  identificationType: values.identificationType,
+                  identificationNumber: values.identificationNumber,
+                  identificationDocument: values.identificationDocument
+                    ? formData
+                    : undefined,
+                  privacyConsent: values.privacyConsent,
+                };
+          
+                const newPatient = await registerPatient(patient);
+          
+                if (newPatient) {
+                  router.push(`/patients/${user.$id}/new-appointment`);
+                }
+              } catch (error) {
+                console.log(error);
+              }
+          
+              setIsLoading(false);         
         }
-    }
 
     return (
         <Form {...form}>
@@ -65,7 +101,6 @@ export default function RegisterForm({ user }: { user: User }) {
                     </div>
 
                     {/* NAME */}
-
                     <CustomFormField
                         control={form.control}
                         fieldType={FormFieldsType.INPUT}
@@ -96,6 +131,7 @@ export default function RegisterForm({ user }: { user: User }) {
                             placeholder="(555) 123-4567"
                         />
                     </div>
+
                     {/* BirthDate & Gender */}
                     <div className="flex flex-col gap-6 xl:flex-row">
                         <CustomFormField
@@ -149,6 +185,7 @@ export default function RegisterForm({ user }: { user: User }) {
                             placeholder=" Software Engineer"
                         />
                     </div>
+
                     {/* Emergency Contact Name & Emergency Contact Number */}
                     <div className="flex flex-col gap-6 xl:flex-row">
                         <CustomFormField
@@ -257,7 +294,7 @@ export default function RegisterForm({ user }: { user: User }) {
                 </section>
                 <section className="space-y-6">
                     <div className="mb-9 space-y-1">
-                        <h2 className="sub-header">Identification and Verfication</h2>
+                        <h2 className="sub-header">Identification and Verification</h2>
                     </div>
 
                     <CustomFormField
@@ -311,16 +348,14 @@ export default function RegisterForm({ user }: { user: User }) {
                         fieldType={FormFieldsType.CHECKBOX}
                         control={form.control}
                         name="disclosureConsent"
-                        label="I consent to the use and disclosure of my health
-            information for treatment purposes."
+                        label="I consent to the use and disclosure of my health information for treatment purposes."
                     />
 
                     <CustomFormField
                         fieldType={FormFieldsType.CHECKBOX}
                         control={form.control}
                         name="privacyConsent"
-                        label="I acknowledge that I have reviewed and agree to the
-            privacy policy"
+                        label="I acknowledge that I have reviewed and agree to the privacy policy"
                     />
                 </section>
 

@@ -1,20 +1,12 @@
 "use client"
 import React from 'react'
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+import {  FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Control } from "react-hook-form"
 import { FormFieldsType } from './forms/PatientForm'
 import Image from 'next/image'
-import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css'
 import { E164Number } from "libphonenumber-js/core";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -129,21 +121,21 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             );
         case FormFieldsType.SKELETON:
             return props.renderSkeleton ? props.renderSkeleton(field) : null;
-            case FormFieldsType.CHECKBOX:
-                return (
-                  <FormControl>
+        case FormFieldsType.CHECKBOX:
+            return (
+                <FormControl>
                     <div className="flex items-center gap-4">
-                      <Checkbox
-                        id={props.name}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                      <label htmlFor={props.name} className="checkbox-label">
-                        {props.label}
-                      </label>
+                        <Checkbox
+                            id={props.name}
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                        />
+                        <label htmlFor={props.name} className="checkbox-label">
+                            {props.label}
+                        </label>
                     </div>
-                  </FormControl>
-                );
+                </FormControl>
+            );
     }
 }
 
