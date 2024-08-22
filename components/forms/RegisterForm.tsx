@@ -74,6 +74,8 @@ export default function RegisterForm({ user }: { user: User }) {
                     ? formData
                     : undefined,
                   privacyConsent: values.privacyConsent,
+                  treatmentConsent: values.treatmentConsent,
+                  disclosureConsent: values.disclosureConsent,
                 };
           
                 const newPatient = await registerPatient(patient);
