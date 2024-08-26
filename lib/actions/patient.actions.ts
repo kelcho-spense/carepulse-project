@@ -17,8 +17,7 @@ import { parseStringify } from "../utils";
 export const createUser = async (user: CreateUserParams) => {
     try {
         // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
-        console.log("Creating user")
-        const newUser = await users.create(
+                const newUser = await users.create(
             ID.unique(),
             user.email,
             user.phone,
@@ -78,7 +77,7 @@ export const registerPatient = async ({ identificationDocument, ...patient  }: R
           ...patient,
         }
       );  
-      console.log({newPatient})
+      // console.log({newPatient})
       return parseStringify(newPatient);
     } catch (error) {
       console.error("An error occurred while creating a new patient:", error);

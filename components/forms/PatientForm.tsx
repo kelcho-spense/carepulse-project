@@ -48,8 +48,7 @@ export default function PatientForm() {
             const user = await createUser(userData);
            
             if (user) router.push(`/patients/${user.$id}/register`)
-        } catch (error) {
-            
+        } catch (error) {            
             console.log(error)
         }
     }
