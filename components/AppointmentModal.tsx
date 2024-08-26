@@ -13,16 +13,11 @@ import {
 } from "@/components/ui/dialog";
 import { Appointment } from "@/types/appwrite.types";
 
-import  AppointmentForm  from "./forms/AppointmentForm";
+import AppointmentForm from "./forms/AppointmentForm";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-export const AppointmentModal = ({
-    patientId,
-    userId,
-    appointment,
-    type,
-}: {
+export const AppointmentModal = ({ patientId, userId, appointment, type }: {
     patientId: string;
     userId: string;
     appointment?: Appointment;
